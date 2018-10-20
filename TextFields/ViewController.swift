@@ -33,6 +33,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: Life Cycle
     
+    override func viewWillAppear(_ animated: Bool) {
+        subscribeToKeyboardNotifications()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,10 +46,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
         self.textField4.delegate = emojisDelegate
         self.textField5.delegate = colorizerDelegate
         self.textField6.delegate = randomColorDelegate
-        
         self.editingSwitch.setOn(false, animated: false)
-        
-        initKeyboarHandler()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        unSubscribeToKeyboardNotifications()
     }
     
     // MARK: Text Field Delegate
@@ -68,7 +73,28 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func initKeyboarHandler() {
+    @objc func keyboarHandler(notification: Notification) {
+
+        let userInfo = notification.userInfo!
+
+        let keyboardScreenEndFrame =
+            (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue)
+                .cgRectValue
+        let keyboardViewEndFrame =
+            view.convert(keyboardScreenEndFrame, from: view.window)
+
+        if notification.name == UIResponder.keyboardWillHideNotification {
+            self.scrollView?.contentInset = UIEdgeInsets.zero
+        } else {
+            let height = keyboardViewEndFrame.height
+            self.scrollView?.contentInset =
+                UIEdgeInsets(top: 0, left: 0, bottom: height, right: 0)
+        }
+
+        self.scrollView?.scrollIndicatorInsets = self.scrollView.contentInset
+    }
+    
+    func subscribeToKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector:
             #selector(keyboarHandler), name:
             UIResponder.keyboardWillHideNotification, object: nil)
@@ -77,25 +103,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
             UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
     
-    @objc func keyboarHandler(notification: Notification) {
-        
-        let userInfo = notification.userInfo!
-        
-        let keyboardScreenEndFrame =
-            (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue)
-                .cgRectValue
-        let keyboardViewEndFrame =
-            view.convert(keyboardScreenEndFrame, from: view.window)
-        
-        if notification.name == UIResponder.keyboardWillHideNotification {
-            self.scrollView?.contentInset = UIEdgeInsets.zero
-        } else {
-            let height = keyboardViewEndFrame.height
-            self.scrollView?.contentInset =
-                UIEdgeInsets(top: 0, left: 0, bottom: height, right: 0)
-        }
-        
-        self.scrollView?.scrollIndicatorInsets = self.scrollView.contentInset
+    func unSubscribeToKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self, name:
+            UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name:
+            UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
-
 }
