@@ -1,7 +1,7 @@
 # TestFields
 A collection of TextField Delegates
 
-## Extensions:
+## Delegates:
 
     - ZipCodeTextFieldDelegate
     - CashTextFieldDelegate
