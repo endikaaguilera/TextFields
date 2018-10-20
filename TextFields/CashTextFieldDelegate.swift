@@ -13,7 +13,8 @@ import UIKit
 
 class CashTextFieldDelegate: NSObject, UITextFieldDelegate {
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range:
+        NSRange, replacementString string: String) -> Bool {
         
         let oldText = textField.text! as NSString
         var newText = oldText.replacingCharacters(in: range, with: string)
@@ -29,7 +30,8 @@ class CashTextFieldDelegate: NSObject, UITextFieldDelegate {
         
         // Format the new string
         if let numOfPennies = Int(digitText) {
-            newText = "$" + self.dollarStringFromInt(numOfPennies) + "." + self.centsStringFromInt(numOfPennies)
+            newText = "$" + self.dollarStringFromInt(numOfPennies) + "."
+                + self.centsStringFromInt(numOfPennies)
         } else {
             newText = "$0.00"
         }

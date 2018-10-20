@@ -31,27 +31,32 @@ class EmojiTextFieldDelegate : NSObject, UITextFieldDelegate {
         translations["cat"] = "\u{E04F}"
     }
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range:
+        NSRange, replacementString string: String) -> Bool {
+                
         var replacedAnEmoji = false
         var emojiStringRange: NSRange
         
-        // Construct the text that will be in the field if this change is accepted
+        // Construct a text that will be in the field if this change is accepted
         var newText = textField.text! as NSString
-        newText = newText.replacingCharacters(in: range, with: string) as NSString
+        newText = newText
+            .replacingCharacters(in: range, with: string)as NSString
         
-        // For each dictionary entry in translations, pull out a string to search for
-        // and an emoji to replace it with
+        // For each dictionary entry in translations, pull out a string to
+        // search for and an emoji to replace it with
         
         for (emojiString, emoji) in translations {
             
-            // Search for all occurances of key (ie. "dog"), and replace with emoji (ie. 🐶)
+            // Search for all occurances of key (ie. "dog"),
+            // and replace with emoji (ie. 🐶)
             repeat {
-                emojiStringRange = newText.range(of: emojiString, options: .caseInsensitive)
+                emojiStringRange = newText.range(of: emojiString, options:
+                    .caseInsensitive)
                 
                 // found one
                 if emojiStringRange.location != NSNotFound {
-                    newText = newText.replacingCharacters(in: emojiStringRange, with: emoji) as NSString
+                    newText = newText.replacingCharacters(in:
+                        emojiStringRange, with: emoji) as NSString
                     replacedAnEmoji = true
                 }
                 

@@ -30,22 +30,27 @@ class ColorizerTextFieldDelegate: NSObject, UITextFieldDelegate {
     ]
     
     /**
-     * Examines the new string whenever the text changes. Finds color-words, blends them, and set the text color
+     * Examines the new string whenever the text changes. Finds color-words,
+     * blends them, and set the text color
      */
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range:
+        NSRange, replacementString string: String) -> Bool {
         
         var colorsInTheText = [UIColor]()
         
-        // Construct the text that will be in the field if this change is accepted
+        // Construct a text that will be in the field if this change is accepted
         var newText = textField.text! as NSString
-        newText = newText.replacingCharacters(in: range, with: string) as NSString
+        newText = newText.replacingCharacters(in: range, with: string)
+            as NSString
         
-        // For each dictionary entry in translations, pull out a string to search for
+        // For each dictionary entry in translations,
+        // pull out a string to search for
         
         for (key, color) in self.colors {
             
-            if newText.range(of: key, options: .caseInsensitive).location != NSNotFound {
+            if newText.range(of: key, options: .caseInsensitive).location
+                != NSNotFound {
                 colorsInTheText.append(color)
             }
         }
@@ -90,7 +95,8 @@ class ColorizerTextFieldDelegate: NSObject, UITextFieldDelegate {
             colorComponents[i] /= CGFloat(colors.count)
         }
         
-        return UIColor(red: colorComponents[0], green: colorComponents[1], blue: colorComponents[2], alpha: colorComponents[3])
+        return UIColor(red: colorComponents[0], green: colorComponents[1], blue:
+            colorComponents[2], alpha: colorComponents[3])
     }
     
 }
